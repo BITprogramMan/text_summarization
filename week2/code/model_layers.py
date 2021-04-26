@@ -19,11 +19,14 @@ class Encoder(tf.keras.Model):
         定义Embedding层，加载预训练的词向量
         请写出你的代码
         """
+        self.embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim, embeddings_initializer=embedding_matrix,
+                                                   trainable=True)
         # tf.keras.layers.GRU自动匹配cpu、gpu
         """
         定义单向的RNN、GRU、LSTM层
         请写出你的代码
         """
+        self.gru = tf.keras.layers.GRU(self.enc_units, return_state=True, return_sequences=True)
         ###################此处有作业################################
 
     def call(self, x, hidden):
@@ -61,11 +64,13 @@ class BahdanauAttention(tf.keras.Model):
         计算注意力权重值，得到score
         请写出你的代码
         """
+        score = self.V(tf.nn.tanh(self.W1(values) + self.W2(hidden_with_time_axis)))
 
         """
         归一化score，得到 attention_weights
         your code
         """
+        attention_weights = tf.nn.softmax(score, axis=1)
         ###################此处有作业################################
 
         # # 使用注意力权重*编码器输出作为返回值，将来会作为解码器的输入
@@ -88,21 +93,24 @@ class Decoder(tf.keras.Model):
         定义Embedding层，加载预训练的词向量
         请写出你的代码
         """
-
+        self.embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim, embeddings_initializer=embedding_matrix,
+                                                   trainable=True)
         """
         定义单向的RNN、GRU、LSTM层
         请写出你的代码
         """
-
+        self.gru = tf.keras.layers.GRU(self.enc_units, return_state=True, return_sequences=True)
         """
         定义最后的fc层，用于预测词的概率
         请写出你的代码
         """
+        self.fc=tf.keras.layers.Dense(vocab_size)
 
         """
         注意力机制
         请写出你的代码
         """
+        self.attention=BahdanauAttention(self.dec_units)
         ###################此处有作业################################
 
         # used for attention

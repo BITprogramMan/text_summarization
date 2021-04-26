@@ -42,6 +42,7 @@ class Seq2Seq(tf.keras.Model):
             如：xxx = self.decoder(), 采用Teachering Forcing方法
             """
             dec_input = tf.expand_dims(dec_target[:, t], 1)
+            pred = self.decoder(dec_input, enc_output, dec_hidden)
 
             predictions.append(pred)
 
