@@ -170,10 +170,15 @@ class Pointer(tf.keras.layers.Layer):
         self.w_c_reduce = tf.keras.layers.Dense(1)
 
     def call(self, context_vector, dec_hidden, dec_inp):
+        """
         # change dec_inp_context to [batch_sz,embedding_dim+enc_units]
+        返回指针的计算结果
+        补全代码 
+        """
         return tf.nn.sigmoid(self.w_s_reduce(dec_hidden) +
                              self.w_c_reduce(context_vector) +
                              self.w_i_reduce(dec_inp))
+
 
 
 if __name__ == '__main__':

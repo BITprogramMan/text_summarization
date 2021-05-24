@@ -118,8 +118,18 @@ def _calc_final_dist(_enc_batch_extend_vocab, vocab_dists, attn_dists, p_gens, b
     # final_dists is a list length max_dec_steps; each entry is a tensor shape (batch_size, extended_vsize) giving
     # the final distribution for that decoder timestep
     # Note that for decoder timesteps and examples corresponding to a [PAD] token, this is junk - ignore.
+    """
+        求得经过 PGN 后最终的概率分布 final_dists
+        补全代码
+    """
+    attn_dists_projected = [tf.scatter_nd(indices, copy_dist, shape) for copy_dist in attn_dists]
+    
     final_dists = [vocab_dist + copy_dist for (vocab_dist, copy_dist) in
                    zip(vocab_dists_extended, attn_dists_projected)]
+    
+    
+    
+    
 
     return final_dists
 
